@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tienda Profesional — Inicio</title>
+  <meta name="description" content="Home - Tienda Profesional. Demo con cuotas 3/6 sin interés y envíos gratis." />
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-category="Todos">
+  <header class="topbar" role="banner">
+    <a class="brand" href="/index.html">TP <span class="brand-name">Tienda Profesional</span></a>
+    <nav class="main-nav" aria-label="Principal">
+      <a href="ofertas.html">Ofertas</a>
+      <a href="celulares.html">Celulares</a>
+      <a href="electronica.html">Electrónica</a>
+      <a href="hogar.html">Hogar</a>
+      <a href="moda.html">Moda</a>
+      <a href="deportes.html">Deportes</a>
+    </nav>
+
+    <div class="search-area">
+      <input id="searchInput" type="search" placeholder="Buscar productos, marcas y más..." />
+      <button id="btnSearch" class="btn primary">Buscar</button>
+    </div>
+
+    <div class="actions">
+      <button class="chip" id="btnAccount">Mi cuenta</button>
+      <div class="settings" id="settings">
+        <button class="chip" id="settingsToggle" aria-haspopup="true" aria-expanded="false">Opciones ▾</button>
+        <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Opciones de cuotas">
+          <label><span>Mostrar 3 cuotas</span><input type="checkbox" id="opt3" checked></label>
+          <label><span>Mostrar 6 cuotas</span><input type="checkbox" id="opt6" checked></label>
+        </div>
+      </div>
+      <button class="chip" id="btnCart">Carrito (0)</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="promo">
+        <h1>Envíos gratis y cuotas sin interés</h1>
+        <p class="muted">Pagá en 3 o 6 cuotas sin interés en productos seleccionados.</p>
+      </div>
+
+      <aside class="aside-card">
+        <h3>Ofertas destacadas</h3>
+        <img src="https://via.placeholder.com/360x90?text=Promo+1" alt="Promo 1" />
+        <img src="https://via.placeholder.com/360x90?text=Promo+2" alt="Promo 2" />
+      </aside>
+    </section>
+
+    <section>
+      <h2 id="pageTitle">Productos destacados</h2>
+      <div id="productsGrid" class="grid" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="sitefoot">
+    <div>
+      <strong>Tienda Profesional</strong>
+      <div class="muted">Demo · Diseño responsivo</div>
+    </div>
+    <small class="muted">© 2025</small>
+  </footer>
+
+  <script src="./js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "name": "tienda-profesional-demo",
+  "version": "1.0.0",
+  "scripts": {
+    "sass": "sass --watch scss:css --no-source-map",
+    "sass:build": "sass scss/styles.scss css/styles.css --style=compressed"
+  },
+  "devDependencies": {
+    "sass": "^1.70.0"
+  }
+}
