@@ -5,11 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Tienda Profesional — Inicio</title>
   <meta name="description" content="Home - Tienda Profesional. Demo con cuotas 3/6 sin interés y envíos gratis." />
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- Enlaza el CSS dentro de la carpeta scss -->
+  <link rel="stylesheet" href="scss/styles.css">
 </head>
 <body data-category="Todos">
   <header class="topbar" role="banner">
-    <a class="brand" href="/index.html">TP <span class="brand-name">Tienda Profesional</span></a>
+    <a class="brand" href="index.html">TP <span class="brand-name">Tienda Profesional</span></a>
     <nav class="main-nav" aria-label="Principal">
       <a href="ofertas.html">Ofertas</a>
       <a href="celulares.html">Celulares</a>
@@ -28,7 +29,7 @@
       <button class="chip" id="btnAccount">Mi cuenta</button>
       <div class="settings" id="settings">
         <button class="chip" id="settingsToggle" aria-haspopup="true" aria-expanded="false">Opciones ▾</button>
-        <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Opciones de cuotas">
+        <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Opciones de cuotas" hidden>
           <label><span>Mostrar 3 cuotas</span><input type="checkbox" id="opt3" checked></label>
           <label><span>Mostrar 6 cuotas</span><input type="checkbox" id="opt6" checked></label>
         </div>
@@ -65,6 +66,6 @@
     <small class="muted">© 2025</small>
   </footer>
 
-  <script src="./js/app.js" defer></script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>

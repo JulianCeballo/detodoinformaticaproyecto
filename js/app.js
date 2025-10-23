@@ -1,144 +1,82 @@
-// app.js - lógica central. Filtra por categoría tomada del atributo data-category del <body>.
-// Calcula cuotas 3/6 sin interés (ilustrativas), muestra envío gratis y controla carrito demo.
+document.addEventListener('DOMContentLoaded', function () {
+  // Evitar cualquier preventDefault global: no añadimos listeners que bloqueen <a> por defecto.
 
-(() => {
-  // Productos ejemplo (agrega categorías para filtrar)
-  const products = [
-    { id:1, title:'Smartphone Ultra 128GB', price:79999, image:'https://via.placeholder.com/420x300?text=Smartphone', shippingFree:true, eligible3:true, eligible6:true, category:'Celulares' },
-    { id:2, title:'Auriculares Bluetooth ANC', price:12999, image:'https://via.placeholder.com/420x300?text=Auriculares', shippingFree:true, eligible3:true, eligible6:false, category:'Electrónica' },
-    { id:3, title:'Smart TV 43" 4K', price:199999, image:'https://via.placeholder.com/420x300?text=Smart+TV', shippingFree:false, eligible3:true, eligible6:true, category:'Electrónica' },
-    { id:4, title:'Notebook Pro 16GB', price:159999, image:'https://via.placeholder.com/420x300?text=Notebook', shippingFree:false, eligible3:true, eligible6:true, category:'Electrónica' },
-    { id:5, title:'Licuadora Compacta 800W', price:12499, image:'https://via.placeholder.com/420x300?text=Licuadora', shippingFree:true, eligible3:true, eligible6:false, category:'Hogar' },
-    { id:6, title:'Zapatillas Running', price:7899, image:'https://via.placeholder.com/420x300?text=Zapatillas', shippingFree:true, eligible3:false, eligible6:false, category:'Moda' },
-    { id:7, title:'Pelota de fútbol oficial', price:4599, image:'https://via.placeholder.com/420x300?text=Pelota', shippingFree:true, eligible3:true, eligible6:false, category:'Deportes' },
-    { id:8, title:'Cafetera Espresso Automática', price:24499, image:'https://via.placeholder.com/420x300?text=Cafetera', shippingFree:true, eligible3:true, eligible6:true, category:'Hogar' },
-    { id:9, title:'Powerbank 20000mAh', price:5999, image:'https://via.placeholder.com/420x300?text=Powerbank', shippingFree:false, eligible3:true, eligible6:false, category:'Celulares' },
-    { id:10, title:'Smartwatch Sport', price:17999, image:'https://via.placeholder.com/420x300?text=Smartwatch', shippingFree:false, eligible3:true, eligible6:true, category:'Deportes' }
-  ];
-
-  const nfCurrency = new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 });
-
-  // Estado
-  let show3 = true;
-  let show6 = true;
-  let cartCount = 0;
-
-  // Elementos globales
-  const root = document.getElementById('productsGrid');
-  const searchInput = document.getElementById('searchInput');
-  const btnSearch = document.getElementById('btnSearch');
+  // Toggle panel de settings (accesible)
   const settingsToggle = document.getElementById('settingsToggle');
-  const settingsRoot = document.getElementById('settings');
-  const opt3 = document.getElementById('opt3');
-  const opt6 = document.getElementById('opt6');
-  const btnCart = document.getElementById('btnCart');
+  const settingsPanel = document.getElementById('settingsPanel');
 
-  // Si no existe, evitar errores (las páginas tienen header copiado y puede no tener controles)
-  function safe(el) { return el || { addEventListener(){}, value: '', checked:true, textContent:'' }; }
+  if (settingsToggle && settingsPanel) {
+    settingsToggle.addEventListener('click', () => {
+      const isOpen = settingsPanel.hasAttribute('hidden') === false;
+      if (isOpen) {
+        settingsPanel.setAttribute('hidden', '');
+        settingsToggle.setAttribute('aria-expanded', 'false');
+      } else {
+        settingsPanel.removeAttribute('hidden');
+        settingsToggle.setAttribute('aria-expanded', 'true');
+      }
+    });
 
-  // Leer categoría desde body
-  const category = (document.body.getAttribute('data-category') || 'Todos').trim();
-
-  // Filtrar por categoría
-  function getList() {
-    if (category === 'Todos' || category === '') return products;
-    return products.filter(p => p.category === category);
+    // Cerrar al hacer click fuera
+    document.addEventListener('click', (e) => {
+      if (!settingsPanel.contains(e.target) && e.target !== settingsToggle) {
+        settingsPanel.setAttribute('hidden', '');
+        settingsToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
 
-  // Render productos
-  function renderProducts(list = getList()) {
-    if (!root) return;
-    root.innerHTML = '';
-    if (!list.length) {
-      root.innerHTML = `<div class="card"><div class="muted">No se encontraron productos en "${category}".</div></div>`;
-      return;
-    }
+  // Botón de búsqueda: si se quiere, navega a una página de búsqueda o filtra productos
+  const btnSearch = document.getElementById('btnSearch');
+  const searchInput = document.getElementById('searchInput');
+  if (btnSearch && searchInput) {
+    btnSearch.addEventListener('click', () => {
+      const q = searchInput.value && searchInput.value.trim();
+      if (!q) {
+        // Si no hay query, puedes mostrar un mensaje o simplemente retornar
+        searchInput.focus();
+        return;
+      }
+      // Ejemplo: navegar a una página de búsqueda (asegúrate de que exista search.html)
+      // Si prefieres que sea una SPA, reemplaza por la lógica de filtrado.
+      const url = `search.html?q=${encodeURIComponent(q)}`;
+      window.location.href = url;
+    });
+    // permitir Enter en el input
+    searchInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') btnSearch.click();
+    });
+  }
 
-    list.forEach(p => {
-      const price = nfCurrency.format(p.price);
-      const per3 = nfCurrency.format(Math.round(p.price / 3));
-      const per6 = nfCurrency.format(Math.round(p.price / 6));
+  // Ejemplo seguro para el carrito (actualiza contador)
+  const btnCart = document.getElementById('btnCart');
+  if (btnCart) {
+    // si guardas el carrito en localStorage, mostrar cantidad
+    const cart = JSON.parse(localStorage.getItem('tp_cart') || '[]');
+    btnCart.textContent = `Carrito (${cart.length})`;
+    btnCart.addEventListener('click', () => {
+      // ir a carrito si existe carrito.html
+      window.location.href = 'cart.html';
+    });
+  }
 
+  // Ejemplo: cargar productos de ejemplo en el grid si está vacío
+  const productsGrid = document.getElementById('productsGrid');
+  if (productsGrid && productsGrid.children.length === 0) {
+    // muestra placeholders para comprobar el diseño y colores
+    const sample = Array.from({length:6}).map((_,i) => {
       const card = document.createElement('article');
-      card.className = 'card';
+      card.className = 'product-card';
       card.innerHTML = `
-        <div class="thumb"><img src="${p.image}" alt="${escapeHtml(p.title)}"></div>
-        <div class="title">${escapeHtml(p.title)}</div>
-        <div class="meta">
-          <div>
-            <div class="price">${price}</div>
-            <div class="muted">Precio final · stock limitado</div>
-          </div>
-          <div class="badges">
-            ${p.shippingFree ? `<span class="badge-ship">Envío gratis</span>` : ''}
-            ${p.shippingFree ? `<span class="badge-free">GRATIS</span>` : ''}
-          </div>
-        </div>
-        <div class="installments" id="inst-${p.id}"></div>
-        <div class="row" style="margin-top:auto">
-          <div class="muted">Pago seguro · 3/6 cuotas</div>
-          <button class="buy btn small" data-id="${p.id}">Comprar</button>
+        <div style="background:#fff;padding:1rem;border-radius:8px;box-shadow:0 6px 18px rgba(15,23,42,0.06);">
+          <img src="https://via.placeholder.com/300x180?text=Producto+${i+1}" alt="Producto ${i+1}" style="width:100%;border-radius:6px;margin-bottom:.5rem" />
+          <h3 style="margin:.25rem 0">Producto ${i+1}</h3>
+          <p style="color:var(--muted);margin-bottom:.5rem">Descripción breve</p>
+          <a href="producto.html?id=${i+1}" style="display:inline-block;padding:.45rem .6rem;background:var(--primary);color:#fff;border-radius:6px;text-decoration:none;">Ver</a>
         </div>
       `;
-      root.appendChild(card);
-
-      const instEl = document.getElementById(`inst-${p.id}`);
-      const parts = [];
-      if (show3 && p.eligible3) parts.push(`<div>3 cuotas sin interés de <strong style="color:var(--primary)">${per3}</strong></div>`);
-      if (show6 && p.eligible6) parts.push(`<div>6 cuotas sin interés de <strong style="color:var(--primary)">${per6}</strong></div>`);
-      instEl.innerHTML = parts.length ? parts.join('') : `<div class="muted">No disponible en cuotas sin interés</div>`;
-
-      // evento comprar
-      const buyBtn = card.querySelector('.buy');
-      buyBtn.addEventListener('click', () => addToCart(p));
+      return card;
     });
+    sample.forEach(s => productsGrid.appendChild(s));
   }
-
-  // Añadir al carrito (demo)
-  function addToCart(product) {
-    cartCount += 1;
-    if (btnCart) btnCart.textContent = `Carrito (${cartCount})`;
-    alert(`Añadido al carrito:\n${product.title}\n${nfCurrency.format(product.price)}`);
-  }
-
-  // Búsqueda
-  function doSearch() {
-    const q = (searchInput && searchInput.value || '').trim().toLowerCase();
-    if (!q) { renderProducts(); return; }
-    const filtered = getList().filter(p => p.title.toLowerCase().includes(q));
-    renderProducts(filtered);
-  }
-
-  // pequeños helpers
-  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
-
-  // Asignar eventos (si existen los controles)
-  safe(btnSearch).addEventListener('click', doSearch);
-  if (searchInput) searchInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doSearch(); } });
-
-  // settings panel toggle (si existe)
-  if (settingsToggle && settingsRoot) {
-    settingsToggle.addEventListener('click', () => {
-      const open = settingsRoot.classList.toggle('open');
-      settingsToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', (e) => { if (!settingsRoot.contains(e.target)) { settingsRoot.classList.remove('open'); if (settingsToggle) settingsToggle.setAttribute('aria-expanded','false'); } });
-  }
-
-  if (opt3) opt3.addEventListener('change', (e) => { show3 = e.target.checked; renderProducts(); });
-  if (opt6) opt6.addEventListener('change', (e) => { show6 = e.target.checked; renderProducts(); });
-
-  // shortcut "/" focus search
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-      if (searchInput) searchInput.focus();
-    }
-  });
-
-  // init
-  renderProducts();
-
-  // export para debugging
-  window.TiendaDemo = { renderProducts, products, addToCart };
-})();
+});
