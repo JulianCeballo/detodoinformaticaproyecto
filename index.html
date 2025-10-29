@@ -9,37 +9,35 @@
   <link rel="stylesheet" href="scss/styles.css">
 </head>
 <body data-category="Todos">
-  <header class="topbar" role="banner">
-    <a class="brand" href="index.html">TP <span class="brand-name">Tienda Profesional</span></a>
-    <nav class="main-nav" aria-label="Principal">
-      
-      <a href="./html/accesorios.html">Accesorios</a>
-      <a href="./html/audio.html">Audio</a>
-      <a href="./html/componentes.html">Componentes de pc</a>
-      <a href="./html/electronica.html">Electrónica</a>
-      <a href="./html/gamers.html">Gamers</a>
-      <a href="./html/ofertas.html">Ofertas</a>
-      
-      
-    </nav>
+ <header class="topbar" role="banner">
+  <a class="brand" href="index.html">
+    <span class="brand-logo">🖥️</span>
+    <span class="brand-name">Tienda Profesional</span>
+  </a>
 
-    <div class="search-area">
-      <input id="searchInput" type="search" placeholder="Buscar productos, marcas y más..." />
-      <button id="btnSearch" class="btn primary">Buscar</button>
-    </div>
+  <!-- Botón menú móvil -->
+  <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+    ☰
+  </button>
 
-    <div class="actions">
-      <button class="chip" id="btnAccount">Mi cuenta</button>
-      <div class="settings" id="settings">
-        <button class="chip" id="settingsToggle" aria-haspopup="true" aria-expanded="false">Opciones ▾</button>
-        <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Opciones de cuotas" hidden>
-          <label><span>Mostrar 3 cuotas</span><input type="checkbox" id="opt3" checked></label>
-          <label><span>Mostrar 6 cuotas</span><input type="checkbox" id="opt6" checked></label>
-        </div>
-      </div>
-      <button class="chip" id="btnCart">Carrito (0)</button>
-    </div>
-  </header>
+  <nav class="main-nav" id="mainNav" aria-label="Principal">
+    <a href="./html/accesorios.html">Accesorios</a>
+    <a href="./html/audio.html">Audio</a>
+    <a href="./html/componentes.html">Componentes de PC</a>
+    <a href="./html/electronica.html">Electrónica</a>
+    <a href="./html/gamers.html">Gamers</a>
+    <a href="./html/ofertas.html">Ofertas</a>
+  </nav>
+
+  <div class="actions">
+    <button class="chip" id="btnAccount">Mi cuenta</button>
+    <button class="chip" id="btnCart">Carrito (0)</button>
+  </div>
+</header>
+
+
+
+  
 
   <main class="container">
     <section class="hero">

@@ -80,3 +80,8 @@ document.addEventListener('DOMContentLoaded', function () {
     sample.forEach(s => productsGrid.appendChild(s));
   }
 });
+
+
+document.getElementById("menuToggle").addEventListener("click", () => {
+  document.getElementById("mainNav").classList.toggle("active");
+});
